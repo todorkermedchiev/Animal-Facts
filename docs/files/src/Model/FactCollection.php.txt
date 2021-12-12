@@ -1,0 +1,71 @@
+<?php
+/**
+ * This file contains definition of FactCollection class
+ * 
+ * PHP Version: 8+
+ * 
+ * @category Model
+ * 
+ * @package App\Model
+ * 
+ * @author Kiril Savchev <k.savchev@gmail.com>
+ * 
+ * @license https://opensource.org/licenses/BSD-3-Clause BSD-3
+ * 
+ * @link https://github.com/img-academy-bg IMG Academy
+ */
+
+namespace App\Model;
+
+use App\Exception\InvalidCollectionObjectException;
+use ArrayObject;
+
+/**
+ * Collection with Fact objects
+ * 
+ * This class extends the built-in ArrayObject and override the offsetSet()
+ * method to validate that all set values are Fact objects
+ *
+ * @category Model
+ * 
+ * @package App\Model
+ * 
+ * @author Kiril Savchev <k.savchev@gmail.com>
+ * 
+ * @license https://opensource.org/licenses/BSD-3-Clause BSD-3
+ * 
+ * @link https://github.com/img-academy-bg IMG Academy
+ */
+class FactCollection extends ArrayObject
+{
+    
+    /**
+     * Override the original method to validate the value is Fact object
+     * 
+     * @param mixed $index  The index that the new value will be set on
+     * @param mixed $newval The object
+     * 
+     * @return void
+     */
+    public function offsetSet(mixed $index, mixed $newval): void
+    {
+        $this->ensureFactObject($newval);
+        parent::offsetSet($index, $newval);
+    }
+    
+    /**
+     * Validate the object is Fact instance
+     * 
+     * @param object $object The object to be checked
+     * 
+     * @return void
+     * 
+     * @throws InvalidCollectionObjectException
+     */
+    protected function ensureFactObject(object $object): void
+    {
+        if (!($object instanceof Fact)) {
+            throw new InvalidCollectionObjectException('Value must be Fact object');
+        }
+    }
+}

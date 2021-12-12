@@ -1,0 +1,48 @@
+<?php
+/**
+ * This file contains definition of FactRepositoryFactory class
+ * 
+ * PHP Version: 8+
+ * 
+ * @category Repository
+ * 
+ * @package App\Repository
+ * 
+ * @author Kiril Savchev <k.savchev@gmail.com>
+ * 
+ * @license https://opensource.org/licenses/BSD-3-Clause BSD-3
+ * 
+ * @link https://github.com/img-academy-bg IMG Academy
+ */
+namespace App\Repository;
+
+use GuzzleHttp\Client;
+
+/**
+ * Class FactRepositoryFactory
+ * 
+ * Creates FactRepository objects
+ *
+ * @category Repository
+ * 
+ * @package App\Repository
+ * 
+ * @author Kiril Savchev <k.savchev@gmail.com>
+ * 
+ * @license https://opensource.org/licenses/BSD-3-Clause BSD-3
+ * 
+ * @link https://github.com/img-academy-bg IMG Academy
+ */
+class FactRepositoryFactory
+{
+    
+    /**
+     * Creates FactRepository objects
+     * 
+     * @return FactRepository
+     */
+    public static function create(): FactRepository
+    {
+        return new FactRepository(new Client(), 'https://cat-fact.herokuapp.com');
+    }
+}

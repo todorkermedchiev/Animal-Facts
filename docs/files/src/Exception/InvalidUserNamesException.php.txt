@@ -1,0 +1,40 @@
+<?php
+/**
+ * This file contains definition of InvalidArgumentException class
+ * 
+ * PHP Version: 8+
+ * 
+ * @category Exception
+ * 
+ * @package App\Exception
+ * 
+ * @author Kiril Savchev <k.savchev@gmail.com>
+ * 
+ * @license https://opensource.org/licenses/BSD-3-Clause BSD-3
+ * 
+ * @link https://github.com/img-academy-bg IMG Academy
+ */
+namespace App\Exception;
+
+use InvalidArgumentException;
+
+/**
+ * InvalidUserNamesException
+ * 
+ * This exceptions is thrown when an array without "first" or "last" index is
+ * tried to be set for user names.
+ *
+ * @category Exception
+ * 
+ * @package App\Exception
+ * 
+ * @author Kiril Savchev <k.savchev@gmail.com>
+ * 
+ * @license https://opensource.org/licenses/BSD-3-Clause BSD-3
+ * 
+ * @link https://github.com/img-academy-bg IMG Academy
+ */
+class InvalidUserNamesException extends InvalidArgumentException
+{
+    //put your code here
+}

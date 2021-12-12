@@ -1,0 +1,108 @@
+<?php
+/**
+ * This file contains definition of Status class
+ * 
+ * PHP Version: 8+
+ * 
+ * @category Model
+ * 
+ * @package App\Model
+ * 
+ * @author Kiril Savchev <k.savchev@gmail.com>
+ * 
+ * @license https://opensource.org/licenses/BSD-3-Clause BSD-3
+ * 
+ * @link https://github.com/img-academy-bg IMG Academy
+ */
+namespace App\Model;
+
+/**
+ * Status for animal facts
+ * 
+ * Simple model for statuses
+ *
+ * @category Model
+ * 
+ * @package App\Model
+ * 
+ * @author Kiril Savchev <k.savchev@gmail.com>
+ * 
+ * @license https://opensource.org/licenses/BSD-3-Clause BSD-3
+ * 
+ * @link https://github.com/img-academy-bg IMG Academy
+ */
+class Status
+{
+    
+    /**
+     * Is the fact verified or not
+     * 
+     * @var bool
+     */
+    protected bool $verified;
+    
+    /**
+     * How many time the fact is sent for verification
+     *
+     * @var int
+     */
+    protected int $sentCount;
+    
+    /**
+     * Creates new Status object
+     * 
+     * @param bool|null $verified  Is the fact is verified or not
+     * @param int|null  $sentCount Sent counted
+     */
+    public function __construct(?bool $verified, ?int $sentCount)
+    {
+        $this->verified = (bool) $verified;
+        $this->sentCount = (int) $sentCount;
+    }
+    
+    /**
+     * Check whether the fact is verified or not
+     * 
+     * @return bool True if it, otherwise false
+     */
+    public function isVerified(): bool
+    {
+        return $this->verified;
+    }
+
+    /**
+     * Returns the sent counter
+     * 
+     * @return int
+     */
+    public function getSentCount(): int
+    {
+        return $this->sentCount;
+    }
+
+    /**
+     * Sets the verified value
+     * 
+     * @param bool $verified True if it is verified, otherwise false
+     * 
+     * @return self
+     */
+    public function setVerified(bool $verified): self
+    {
+        $this->verified = $verified;
+        return $this;
+    }
+
+    /**
+     * Sets the sent counter
+     * 
+     * @param int $sentCount The sent counter
+     * 
+     * @return self
+     */
+    public function setSentCount(int $sentCount): self
+    {
+        $this->sentCount = $sentCount;
+        return $this;
+    }
+}

@@ -1,0 +1,306 @@
+<?php
+/**
+ * This file contains definition of Fact class
+ * 
+ * PHP Version: 8+
+ * 
+ * @category Model
+ * 
+ * @package App\Model
+ * 
+ * @author Kiril Savchev <k.savchev@gmail.com>
+ * 
+ * @license https://opensource.org/licenses/BSD-3-Clause BSD-3
+ * 
+ * @link https://github.com/img-academy-bg IMG Academy
+ */
+
+namespace App\Model;
+
+use App\Exception\InvalidFactTypeException;
+use DateTimeImmutable;
+
+/**
+ * Model for animal facts
+ *
+ * @category Model
+ * 
+ * @package App\Model
+ * 
+ * @author Kiril Savchev <k.savchev@gmail.com>
+ * 
+ * @license https://opensource.org/licenses/BSD-3-Clause BSD-3
+ * 
+ * @link https://github.com/img-academy-bg IMG Academy
+ */
+class Fact
+{
+    /**
+     * Value for cat type
+     */
+    public const CAT = 'cat';
+    
+    /**
+     * Value for dog type
+     */
+    public const DOG = 'dog';
+    
+    /**
+     * Allowed types
+     */
+    public const ALLOWED_TYPES = [
+        self::CAT,
+        self::DOG,
+    ];
+    
+    /**
+     * The fact status
+     * 
+     * @var Status
+     */
+    protected Status $status;
+    
+    /**
+     * The fact id
+     * 
+     * @var string
+     */
+    protected string $id;
+    
+    /**
+     * Date, the fact is created at
+     * 
+     * @var DateTimeImmutable
+     */
+    protected DateTimeImmutable $createdAt;
+    
+    /**
+     * Date, the fact is updated at
+     * 
+     * @var DateTimeImmutable|null
+     */
+    protected ?DateTimeImmutable $updatedAt = null;
+    
+    /**
+     * The fact's text
+     *
+     * @var string
+     */
+    protected string $text;
+    
+    /**
+     * Animal type (cat or dog)
+     *
+     * @var string
+     */
+    protected string $type;
+    
+    /**
+     * The user's id
+     *
+     * @var string
+     */
+    protected string $user;
+    
+    /**
+     * The author object
+     * 
+     * @var User|null
+     */
+    protected ?User $author = null;
+
+
+    /**
+     * Returns the status of the fact
+     * 
+     * @return Status
+     */
+    public function getStatus(): Status
+    {
+        return $this->status;
+    }
+
+    /**
+     * Returns the identifier of the fact
+     * 
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    /**
+     * Returns the date and time when the fact is created
+     * 
+     * @return DateTimeImmutable
+     */
+    public function getCreatedAt(): DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Returns the date and time when the fact is updated
+     * 
+     * @return DateTimeImmutable|null
+     */
+    public function getUpdatedAt(): ?DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Return the text of the string
+     * 
+     * @return string
+     */
+    public function getText(): string
+    {
+        return $this->text;
+    }
+
+    /**
+     * Returns the fact identifier
+     * 
+     * @return string
+     */
+    public function getUser(): string
+    {
+        return $this->user;
+    }
+
+    /**
+     * Sets the fact status
+     * 
+     * @param Status $status The status object
+     *
+     * @return self
+     */
+    public function setStatus(Status $status): self
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+    /**
+     * Sets  the fact identifier
+     * 
+     * @param string $id The identifier
+     * 
+     * @return self
+     */
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * Sets the date and time when the fact is created
+     * 
+     * @param DateTimeImmutable $createdAt The DateTimeImmutable object
+     * 
+     * @return self
+     */
+    public function setCreatedAt(DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    /**
+     * Sets the date and time when the fact is updated if any
+     *
+     * @param DateTimeImmutable|null $updatedAt The object or null
+     * 
+     * @return self
+     */
+    public function setUpdatedAt(?DateTimeImmutable $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    /**
+     * Sets the text of the fact
+     * 
+     * @param string $text The fact's text
+     * 
+     * @return self
+     */
+    public function setText(string $text): self
+    {
+        $this->text = $text;
+        return $this;
+    }
+
+    /**
+     * Sets the user identifier
+     * 
+     * @param string $userId The user's identifier
+     * 
+     * @return self
+     */
+    public function setUser(string $userId): self
+    {
+        $this->user = $userId;
+        return $this;
+    }
+    
+    /**
+     * Returns the author object if any
+     * 
+     * @return User|null The author object or null
+     */
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    /**
+     * Sets the author's object if any
+     * 
+     * @param User|null $author The author object or null
+     * 
+     * @return self
+     */
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
+        if ($author) {
+            $this->setUser($author->getId());
+        }
+        return $this;
+    }
+    
+    /**
+     * Returns the type of the fact
+     * 
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * Sets the fact's type
+     * 
+     * If the type is not allowed it will throw InvalidFactTypeException
+     * 
+     * @param string $type The type of the fact
+     * 
+     * @return self
+     * 
+     * @throws InvalidFactTypeException
+     */
+    public function setType(string $type): self
+    {
+        if (!in_array($type, self::ALLOWED_TYPES)) {
+            throw new InvalidFactTypeException('Animal type is not allowed');
+        }
+        $this->type = $type;
+        return $this;
+    }
+}

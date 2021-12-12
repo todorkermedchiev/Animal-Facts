@@ -1,0 +1,52 @@
+<?php
+/**
+ * This file contains definition of FactControllerFactory class
+ * 
+ * PHP Version: 8+
+ * 
+ * @category Controller
+ * 
+ * @package App\Controller
+ * 
+ * @author Kiril Savchev <k.savchev@gmail.com>
+ * 
+ * @license https://opensource.org/licenses/BSD-3-Clause BSD-3
+ * 
+ * @link https://github.com/img-academy-bg IMG Academy
+ */
+namespace App\Controller;
+
+use App\View\View;
+use App\Repository\FactRepositoryFactory;
+
+/**
+ * FactControllerFactory
+ * 
+ * Factory for FactController objects
+ *
+ * @category Controller
+ * 
+ * @package App\Controller
+ * 
+ * @author Kiril Savchev <k.savchev@gmail.com>
+ * 
+ * @license https://opensource.org/licenses/BSD-3-Clause BSD-3
+ * 
+ * @link https://github.com/img-academy-bg IMG Academy
+ */
+class FactControllerFactory
+{
+    
+    /**
+     * Creates FactController objects
+     * 
+     * @param View $view The view component
+     * 
+     * @return FactController
+     */
+    public static function create(View $view): FactController
+    {
+        $repository = FactRepositoryFactory::create();
+        return new FactController($repository, $view);
+    }
+}

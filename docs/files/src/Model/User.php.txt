@@ -1,0 +1,181 @@
+<?php
+/**
+ * This file contains definition of User class
+ * 
+ * PHP Version: 8+
+ * 
+ * @category Model
+ * 
+ * @package App\Model
+ * 
+ * @author Kiril Savchev <k.savchev@gmail.com>
+ * 
+ * @license https://opensource.org/licenses/BSD-3-Clause BSD-3
+ * 
+ * @link https://github.com/img-academy-bg IMG Academy
+ */
+
+namespace App\Model;
+
+use App\Exception\InvalidUserNamesException;
+
+/**
+ * Class User for fact authors
+ *
+ * @category Model
+ * 
+ * @package App\Model
+ * 
+ * @author Kiril Savchev <k.savchev@gmail.com>
+ * 
+ * @license https://opensource.org/licenses/BSD-3-Clause BSD-3
+ * 
+ * @link https://github.com/img-academy-bg IMG Academy
+ */
+class User
+{
+    
+    /**
+     * The user id
+     * 
+     * @var string
+     */
+    protected string $id;
+    
+    /**
+     * The user's photo
+     * 
+     * @var string
+     */
+    protected string $photo;
+    
+    /**
+     * User names (first and last)
+     * 
+     * @var array|string[]
+     */
+    protected array $name;
+    
+    /**
+     * Creates new User object
+     * 
+     * @param string $id    User identifier
+     * @param string $photo URL for user's photo
+     * @param array  $name  Array with first and last names
+     */
+    public function __construct(string $id, string $photo, array $name)
+    {
+        $this->setId($id);
+        $this->setPhoto($photo);
+        $this->setName($name);
+    }
+
+    /**
+     * Returns the user identifier
+     * 
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    /**
+     * Return the URL of the user's photo
+     * 
+     * @return string
+     */
+    public function getPhoto(): string
+    {
+        return $this->photo;
+    }
+
+    /**
+     * Returns the array with the user first and last names
+     *
+     * @return array
+     */
+    public function getName(): array
+    {
+        return $this->name;
+    }
+    
+    /**
+     * Returns the user's first name
+     *
+     * @return string
+     */
+    public function getFirstName(): string
+    {
+        return $this->name['first'];
+    }
+    
+    /**
+     * Returns the user's last name
+     *
+     * @return string
+     */
+    public function getLastName(): string
+    {
+        return $this->name['last'];
+    }
+    
+    /**
+     * Returns the user's full name
+     * 
+     * @return string
+     */
+    public function getFullName(): string
+    {
+        return $this->getFirstName() . ' ' . $this->getLastName();
+    }
+
+    /**
+     * Sets the user's identifier
+     * 
+     * @param string $id The identifier string
+     * 
+     * @return self
+     */
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * Sets the URL of the user's photo
+     * 
+     * @param string $photo The URL string
+     * 
+     * @return self
+     */
+    public function setPhoto(string $photo): self
+    {
+        $this->photo = $photo;
+        return $this;
+    }
+
+    /**
+     * Sets the user's first and last names
+     * 
+     * If the given parameter does not contain keys "first" or "last" it will
+     * throw an InvalidUserNamesException
+     * 
+     * @param array $name Array with strings for the first and last name
+     * 
+     * @return self
+     * 
+     * @throws InvalidUserNamesException
+     */
+    public function setName(array $name): self
+    {
+        if (array_keys($name) != ['first', 'last']) {
+            throw new InvalidUserNamesException(
+                'Name must contains values for first and last'
+            );
+        }
+        $this->name = $name;
+        return $this;
+    }
+}

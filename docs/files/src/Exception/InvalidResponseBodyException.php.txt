@@ -1,0 +1,39 @@
+<?php
+/**
+ * This file contains definition of InvalidResponseBodyException class
+ * 
+ * PHP Version: 8+
+ * 
+ * @category Exception
+ * 
+ * @package App\Exception
+ * 
+ * @author Kiril Savchev <k.savchev@gmail.com>
+ * 
+ * @license https://opensource.org/licenses/BSD-3-Clause BSD-3
+ * 
+ * @link https://github.com/img-academy-bg IMG Academy
+ */
+namespace App\Exception;
+
+use InvalidArgumentException;
+/**
+ * InvalidResponseBodyException
+ * 
+ * This exception is thrown when a problem with json decoding of the response
+ * body is raised. The origin JsonException must be set as previous exception.
+ *
+ * @category Exception
+ * 
+ * @package App\Exception
+ * 
+ * @author Kiril Savchev <k.savchev@gmail.com>
+ * 
+ * @license https://opensource.org/licenses/BSD-3-Clause BSD-3
+ * 
+ * @link https://github.com/img-academy-bg IMG Academy
+ */
+class InvalidResponseBodyException extends InvalidArgumentException
+{
+    //put your code here
+}
