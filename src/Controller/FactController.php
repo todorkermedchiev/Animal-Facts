@@ -5,6 +5,7 @@
 namespace App\Controller;
 
 use App\Repository\FactRepository;
+use App\Repository\FactRepositoryFactory;
 use App\View\View;
 
 /**
@@ -42,7 +43,12 @@ class FactController
      */
     public function list(int $amount, string $type): string
     {
-        //...
+        $factRepositoryFactory = new FactRepositoryFactory();
+        $factRepository = $factRepositoryFactory->create();
+        
+        $list = $factRepository->getRandomList($amount, $type);
+        // ???????????
+        
     }
     
     /**
@@ -55,6 +61,10 @@ class FactController
      */
     public function single(string $id): string
     {
-        //...
+        $factRepositoryFactory = new FactRepositoryFactory();
+        $factRepository = $factRepositoryFactory->create();
+        
+        $fact = $factRepository->getFact($id);
+        // ????????????
     }
 }

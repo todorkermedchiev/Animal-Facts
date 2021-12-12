@@ -20,6 +20,6 @@ class FactRepositoryFactory
      */
     public function create(): FactRepository
     {
-        return new FactRepository();
+        return new FactRepository(/*?????????*/);
     }
 }

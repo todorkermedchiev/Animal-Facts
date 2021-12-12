@@ -10,6 +10,9 @@ use App\Model\FactCollection;
 use Psr\Http\Client\RequestExceptionInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\RequestInterface;
+use App\Exception\InvalidResponseBodyException;
+use App\Exception\HttpResponseException;
 
 /**
  * Loads Fact models with information from the remote Animal Facts API
@@ -52,7 +55,8 @@ class FactRepository
      */
     public function getFact(string $id): Fact
     {
-        //...
+        $fact = new Fact();
+        return $fact->setId($id); // ????????????
     }
     
     /**
@@ -65,7 +69,10 @@ class FactRepository
     public function getRandomList(int $amount = 1,
             string $animalType = Fact::CAT
     ): FactCollection {
-        //...
+        $factCollection = new FactCollection();
+        $factCollection->offsetSet(/*????????????????????,*/ $amount);
+        $factCollection->ensureFactObject($animalType);
+        return $factColletion;
     }
     
     /**
@@ -74,9 +81,10 @@ class FactRepository
      * @param stdClas $object The values that will be added to the Fact object
      * @return Fact
      */
-    public function createFact(stdClas $object): Fact
+    public function createFact(\stdClass $object): Fact
     {
-        //...
+        $fact = new Fact();
+        // ??????????????????????????
     }
     
     /**
@@ -88,7 +96,9 @@ class FactRepository
      */
     protected function createRequest(string $endpoint, array $params = []): RequestInterface
     {
-        //...
+        $query = http_build_query($params);
+        $url = $this->baseUrl . $endpoint . '?' . $query;
+        return $url; // ??????????????????
     }
     
     /**
@@ -100,7 +110,11 @@ class FactRepository
      */
     protected function decodeResponseBody (StreamInterface $body): array
     {
-        //throw new InvalidResponseBodyExceprion();
+        try {
+            return json_decode($body->__toString());
+        } catch (Exception $ex) {
+            throw new InvalidResponseBodyException();
+        }
     }
     
     /**
@@ -112,6 +126,8 @@ class FactRepository
      */
     protected function ensureHttpResponseIsOK(ResponseInterface $response): void
     {
-        //throw new InvalidResponseBodyException();
+        if (!http_response_code() == 200) {
+            throw new HttpResponseException();
+        }
     }
 }

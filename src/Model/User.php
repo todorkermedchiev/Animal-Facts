@@ -16,21 +16,21 @@ class User
      * 
      * @var string
      */
-    protected string $id = '';
+    protected string $id;
     
     /**
      * User names (first and last)
      * 
      * @var array
      */
-    protected array $name = [];
+    protected array $name;
     
     /**
      * The user's photo
      * 
      * @var string
      */
-    protected string $photo = '';
+    protected string $photo;
     
     /**
      * Creates new User object

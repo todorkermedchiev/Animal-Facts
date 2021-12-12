@@ -20,10 +20,7 @@ class FactCollection extends \ArrayObject
      * @param mixed $newval The object
      * @return void
      */
-    public function offsetSet(mixed $index, mixed $newval): void
-    {
-        // ...
-    }
+    public function offsetSet(mixed $index, mixed $newval): void {}
     
     /**
      * Validate the object is Fact instance
@@ -31,8 +28,5 @@ class FactCollection extends \ArrayObject
      * @param object $object The object to be checked
      * @return void
      */
-    protected function ensureFactObject(object $object): void
-    {
-        // ...
-    }
+    protected function ensureFactObject(object $object): void {}
 }

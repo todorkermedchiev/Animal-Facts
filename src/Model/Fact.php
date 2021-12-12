@@ -145,7 +145,7 @@ class Fact
      */
     public function getUpdatedAt(): \DateTimeImmutable
     {
-        return $this->uodatedAt;
+        return $this->updatedAt;
     }
 
     /**
