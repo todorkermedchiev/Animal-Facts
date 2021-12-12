@@ -30,9 +30,8 @@ class Status
      * 
      * @param bool|null $veirified Is the fact is verified or not
      * @param int|null $sentCount Sent counted
-     * @return mixed
      */
-    public function __construct(?bool $veirified, ?int $sentCount): mixed
+    public function __construct(?bool $veirified, ?int $sentCount)
     {
         $this->verified = $veirified;
         $this->sentCount = $sentCount;

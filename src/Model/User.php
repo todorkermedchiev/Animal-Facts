@@ -38,9 +38,8 @@ class User
      * @param string $id User identifier
      * @param string $photo URL for user's photo
      * @param array $name Array with first and last names
-     * @return mixed
      */
-    public function __construct(string $id, string $photo, array $name): mixed
+    public function __construct(string $id, string $photo, array $name)
     {
         $this->id = $id;
         $this->photo = $photo;

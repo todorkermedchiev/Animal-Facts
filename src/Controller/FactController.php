@@ -23,9 +23,9 @@ class FactController
      * 
      * @param FactRepository $repository The fact repository object
      * @param View $view The view component
-     * @return mixed
      */
-    public function __construct(FactRepository $repository, View $view): mixed
+    
+    public function __construct(FactRepository $repository, View $view)
     {
         $this->repository = $repository;
         $this->view = $view;

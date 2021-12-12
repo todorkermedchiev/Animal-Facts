@@ -37,9 +37,8 @@ class FactRepository
      * 
      * @param ClientInterface $httpClient HTTP client which loads the info
      * @param string $baseUrl The API base URL
-     * @return mixed
      */
-    public function __construct(ClientInterface $httpClient, string $baseUrl): mixed
+    public function __construct(ClientInterface $httpClient, string $baseUrl)
     {
         $this->httpClient = $httpClient;
         $this->baseUrl = $baseUrl;
