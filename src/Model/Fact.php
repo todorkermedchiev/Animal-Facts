@@ -234,9 +234,9 @@ class Fact
      * @param \DateTimeImmutable $updatedAt The object or null
      * @return $this
      */
-    public function setUpdatedAt(\DateTimeImmutable $uodatedAt)
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt)
     {
-        $this->uodatedAt = $uodatedAt;
+        $this->updatedAt = $updatedAt;
         return $this;
     }
 

@@ -13,6 +13,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\RequestInterface;
 use App\Exception\InvalidResponseBodyException;
 use App\Exception\HttpResponseException;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Client;
 
 /**
  * Loads Fact models with information from the remote Animal Facts API
@@ -55,8 +57,16 @@ class FactRepository
      */
     public function getFact(string $id): Fact
     {
-        $fact = new Fact();
-        return $fact->setId($id); // ????????????
+        $endpoint = '/facts/' . $id;
+        $request = $this->createRequest($endpoint);
+        $response = $this->httpClient->sendRequest($request);
+        $this->ensureHttpResponseIsOK($response);
+        
+        $body = $response->getBody();
+        $decoded = $this->decodeResponseBody($body);
+        
+        $fact = $this->createFact($decoded);
+        return $fact;
     }
     
     /**
@@ -69,9 +79,20 @@ class FactRepository
     public function getRandomList(int $amount = 1,
             string $animalType = Fact::CAT
     ): FactCollection {
+        $endpoint = '/facts/random';
+        $request = $this->createRequest($endpoint, ['animal_type' => $animalType, 'amount' => $amount]);
+        $response = $this->httpClient->sendRequest($request);
+        $this->ensureHttpResponseIsOK($response);
+        
+        $body = $response->getBody();
+        $decoded = $this->decodeResponseBody($body);
+        
         $factCollection = new FactCollection();
-        $factCollection->offsetSet(/*????????????????????,*/ $amount);
-        $factCollection->ensureFactObject($animalType);
+        foreach ($decoded as $object) {
+            $fact = $this->createFact($object);
+            $factCollection->offsetSet($fact->getId(), $fact);
+        }
+        
         return $factColletion;
     }
     
@@ -84,7 +105,13 @@ class FactRepository
     public function createFact(\stdClass $object): Fact
     {
         $fact = new Fact();
-        // ??????????????????????????
+        return $fact->setId($object->id)
+                ->setText($object->text)
+                ->setUser($object->user)
+                ->setType($object->type)
+                ->setCreatedAt($object->createdAt)
+                ->setUpdatedAt($object->updatedAt)
+                ->setStatus($object->status);
     }
     
     /**
@@ -97,8 +124,10 @@ class FactRepository
     protected function createRequest(string $endpoint, array $params = []): RequestInterface
     {
         $query = http_build_query($params);
-        $url = $this->baseUrl . $endpoint . '?' . $query;
-        return $url; // ??????????????????
+        $url = sprintf('%s%s?%s', $this->baseUrl, $endpoint, $query);
+        
+        $request = new Request('GET', $url);
+        return $request;
     }
     
     /**
@@ -111,7 +140,7 @@ class FactRepository
     protected function decodeResponseBody (StreamInterface $body): array
     {
         try {
-            return json_decode($body->__toString());
+            return json_decode($body . '');
         } catch (Exception $ex) {
             throw new InvalidResponseBodyException();
         }
@@ -126,7 +155,7 @@ class FactRepository
      */
     protected function ensureHttpResponseIsOK(ResponseInterface $response): void
     {
-        if (!http_response_code() == 200) {
+        if ($response->getStatusCode() != 200) {
             throw new HttpResponseException();
         }
     }
