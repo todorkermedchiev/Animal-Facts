@@ -15,8 +15,18 @@ use App\View\View;
  */
 class FactController
 {
+    /**
+     * The FactRepository object
+     * 
+     * @var FactRepository
+     */
     protected FactRepository $repository;
     
+    /**
+     * The view component
+     * 
+     * @var View
+     */
     protected View $view;
     
     /**
@@ -42,12 +52,10 @@ class FactController
      * @return string The rendered list (HTML)
      */
     public function list(int $amount, string $type): string
-    {
-        $fact = FactRepositoryFactory::create();       
-        $list = $fact->getRandomList($amount, $type);
+    {      
+        $list = $this->repository->getRandomList($amount, $type);
         $view = new View('views');
-        $view->render('fact/list', $list);
-        
+        $view->render('fact/list', $list);       
         return $view;
     }
     
@@ -61,9 +69,7 @@ class FactController
      */
     public function single(string $id): string
     {
-        $fact = FactRepositoryFactory::create();
-        $fact->getFact($id);
-        
+        $fact = $this->repository->getFact($id);        
         $view = new View('views');
         $view->render('fact\single', $fact);
         return $view;

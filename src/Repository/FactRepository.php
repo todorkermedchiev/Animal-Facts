@@ -15,6 +15,8 @@ use App\Exception\InvalidResponseBodyException;
 use App\Exception\HttpResponseException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Client;
+use DateTimeImmutable;
+use App\Model\Status;
 
 /**
  * Loads Fact models with information from the remote Animal Facts API
@@ -105,13 +107,19 @@ class FactRepository
     public function createFact(\stdClass $object): Fact
     {
         $fact = new Fact();
-        return $fact->setId($object->id)
+        
+        $createdAt = DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s.v\Z', $object->createdAt);
+        $updatedAt = DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s.v\Z', $object->updatedAt);
+        
+        $status = new Status($object->status->verified, $object->status->sentCount);
+        
+        return $fact->setId($object->_id)
                 ->setText($object->text)
                 ->setUser($object->user)
                 ->setType($object->type)
-                ->setCreatedAt($object->createdAt)
-                ->setUpdatedAt($object->updatedAt)
-                ->setStatus($object->status);
+                ->setCreatedAt($createdAt)
+                ->setUpdatedAt($updatedAt)
+                ->setStatus($status);
     }
     
     /**

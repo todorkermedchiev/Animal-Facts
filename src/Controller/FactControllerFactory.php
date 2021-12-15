@@ -6,8 +6,7 @@ namespace App\Controller;
 
 use App\View\View;
 use App\Controller\FactController;
-use App\Repository\FactRepository;
-use GuzzleHttp\ClientInterface;
+use App\Repository\FactRepositoryFactory;
 
 /**
  * Factory for FactController objects
@@ -24,6 +23,9 @@ class FactControllerFactory
      */
     public static function create(View $view): FactController
     {
-        return new FactController(/*?????????????????????????????????,*/ $view);
+        $factRepositoryFactory = new FactRepositoryFactory();
+        $repository = $factRepositoryFactory->create(); 
+        $factController = new FactController($repository, $view);
+        return $factController;
     }
 }

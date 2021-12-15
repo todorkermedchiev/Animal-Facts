@@ -5,6 +5,7 @@
 namespace App\Repository;
 
 use App\Repository\FactRepository;
+use GuzzleHttp\Client;
 
 /**
  * Creates FactRepository objects
@@ -20,6 +21,8 @@ class FactRepositoryFactory
      */
     public function create(): FactRepository
     {
-        return new FactRepository(/*?????????*/);
+        $httpClient = new Client();
+        $factRepository = new FactRepository($httpClient, 'https://cat-fact.herokuapp.com');
+        return $factRepository;
     }
 }

@@ -16,24 +16,24 @@ class Status
      * 
      * @var int
      */
-    protected int $sentCount = 0;
+    protected ?int $sentCount;
     
     /**
      * Is the fact verified or not
      * 
      * @var bool
      */
-    protected bool $verified;
+    protected ?bool $verified;
   
     /**
      * Creates new Status object
      * 
-     * @param bool|null $veirified Is the fact is verified or not
+     * @param bool|null $verified Is the fact is verified or not
      * @param int|null $sentCount Sent counted
      */
-    public function __construct(?bool $veirified, ?int $sentCount)
+    public function __construct(?bool $verified = null, ?int $sentCount = null)
     {
-        $this->verified = $veirified;
+        $this->verified = $verified;
         $this->sentCount = $sentCount;
     }
     

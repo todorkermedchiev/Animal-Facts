@@ -4,6 +4,9 @@
 
 namespace App\Model;
 
+use App\Exception\InvalidCollectionObjectException;
+use App\Model\Fact;
+
 /**
  * Collection with Fact objects
  * This class extends the built-in ArrayObject and override
@@ -20,13 +23,20 @@ class FactCollection extends \ArrayObject
      * @param mixed $newval The object
      * @return void
      */
-    public function offsetSet($index, $newval): void {}
+    public function offsetSet($index, $newval): void {
+        $this->ensureFactObject($newval);
+    }
     
     /**
      * Validate the object is Fact instance
      * 
      * @param object $object The object to be checked
      * @return void
+     * @throws InvalidCollectionObjectException
      */
-    protected function ensureFactObject(object $object): void {}
+    protected function ensureFactObject(object $object): void {
+        if (!($object instanceof Fact)) {
+            throw new InvalidCollectionObjectException();
+        }
+    }
 }
