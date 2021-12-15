@@ -20,7 +20,7 @@ class FactCollection extends \ArrayObject
      * @param mixed $newval The object
      * @return void
      */
-    public function offsetSet(mixed $index, mixed $newval): void {}
+    public function offsetSet($index, $newval): void {}
     
     /**
      * Validate the object is Fact instance

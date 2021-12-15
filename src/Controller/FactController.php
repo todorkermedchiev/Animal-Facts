@@ -43,12 +43,12 @@ class FactController
      */
     public function list(int $amount, string $type): string
     {
-        $factRepositoryFactory = new FactRepositoryFactory();
-        $factRepository = $factRepositoryFactory->create();
+        $fact = FactRepositoryFactory::create();       
+        $list = $fact->getRandomList($amount, $type);
+        $view = new View('views');
+        $view->render('fact/list', $list);
         
-        $list = $factRepository->getRandomList($amount, $type);
-        // ???????????
-        
+        return $view;
     }
     
     /**
@@ -61,10 +61,11 @@ class FactController
      */
     public function single(string $id): string
     {
-        $factRepositoryFactory = new FactRepositoryFactory();
-        $factRepository = $factRepositoryFactory->create();
+        $fact = FactRepositoryFactory::create();
+        $fact->getFact($id);
         
-        $fact = $factRepository->getFact($id);
-        // ????????????
+        $view = new View('views');
+        $view->render('fact\single', $fact);
+        return $view;
     }
 }
