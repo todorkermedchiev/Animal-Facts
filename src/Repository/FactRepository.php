@@ -17,6 +17,7 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Client;
 use DateTimeImmutable;
 use App\Model\Status;
+use App\Model\User;
 
 /**
  * Loads Fact models with information from the remote Animal Facts API
@@ -67,7 +68,13 @@ class FactRepository
         $body = $response->getBody();
         $decoded = $this->decodeResponseBody($body);
         
+        $user = new User($decoded->user->_id,
+                         $decoded->user->photo,
+                         ['FirstName' => $decoded->user->name->first,
+                          'LastName' => $decoded->user->name->last]);
         $fact = $this->createFact($decoded);
+        $fact->setAuthor($user);
+        
         return $fact;
     }
     
@@ -117,10 +124,9 @@ class FactRepository
         $updatedAt = DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s.v\Z', $object->updatedAt);
         
         $status = new Status($object->status->verified, $object->status->sentCount);
-        
+              
         return $fact->setId($object->_id)
                 ->setText($object->text)
-                ->setUser($object->user)
                 ->setType($object->type)
                 ->setCreatedAt($createdAt)
                 ->setUpdatedAt($updatedAt)
@@ -150,10 +156,10 @@ class FactRepository
      * @return array
      * @throws InvalidResponseBodyExceprion
      */
-    protected function decodeResponseBody (StreamInterface $body): array
+    protected function decodeResponseBody (StreamInterface $body)
     {
         try {
-            return json_decode($body . '');
+            return json_decode($body->__toString());
         } catch (Exception $ex) {
             throw new InvalidResponseBodyException();
         }

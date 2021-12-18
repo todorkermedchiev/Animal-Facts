@@ -23,8 +23,8 @@ class FactControllerFactory
      */
     public static function create(View $view): FactController
     {
-        $factRepositoryFactory = new FactRepositoryFactory();
-        $repository = $factRepositoryFactory->create(); 
+        $factory = new FactRepositoryFactory();
+        $repository = $factory->create(); 
         $factController = new FactController($repository, $view);
         return $factController;
     }

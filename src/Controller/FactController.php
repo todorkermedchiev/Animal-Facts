@@ -69,9 +69,8 @@ class FactController
      */
     public function single(string $id): string
     {
-        $fact = $this->repository->getFact($id);        
+        $fact = $this->repository->getFact($id);
         $view = new View('views');
-        $view->render('fact\single', $fact);
-        return $view;
+        return $view->render('fact\single', ['fact' => $fact]);
     }
 }

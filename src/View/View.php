@@ -46,9 +46,8 @@ class View
         $list = $viewModel;
         extract($viewModel, EXTR_OVERWRITE);
         ob_start();
-        require_once $viewFile;
+        require $viewFile;
         $content = ob_get_clean();
-        ob_end_clean();
         return $content;
     }
 }

@@ -120,6 +120,6 @@ class User
     
     public function getFullName(): string
     {
-        return $this->name['FirstName'] . ' ' . $this->name['Lastname'];
+        return $this->name['FirstName'] . ' ' . $this->name['LastName'];
     }
 }

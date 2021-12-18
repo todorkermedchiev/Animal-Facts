@@ -86,7 +86,7 @@ class Fact
      * 
      * @var User|null
      */
-    protected ?User $author;
+    protected ?User $author = null;
     
     /**
      * Returns the identifier of the fact
