@@ -90,12 +90,17 @@ class FactRepository
         $decoded = $this->decodeResponseBody($body);
         
         $factCollection = new FactCollection();
-        foreach ($decoded as $object) {
-            $fact = $this->createFact($object);
+        if ($amount == 1) {
+            $fact = $this->createFact($decoded);
             $factCollection->offsetSet($fact->getId(), $fact);
+        } else {
+            foreach ($decoded as $object) {
+                $fact = $this->createFact($object);
+                $factCollection->offsetSet($fact->getId(), $fact);
+            }
         }
         
-        return $factColletion;
+        return $factCollection;
     }
     
     /**

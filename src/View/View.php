@@ -38,14 +38,14 @@ class View
      */
     public function render(string $viewName, array $viewModel): string
     {
-        $stringTpl = '%s/%s.php';
-        $viewFile = sprintf($stringTpl, $this->viewDirectory, $viewName);
+        $viewFile = sprintf('%s/%s.php', $this->viewDirectory, $viewName);
 
-        if (!file_exists($viewFile)){           
+        if (!file_exists($viewFile)){
             $this->render('error/no_view', $viewModel);
         }
+        $list = $viewModel;
+        extract($viewModel, EXTR_OVERWRITE);
         ob_start();
-        extract($viewModel);
         require_once $viewFile;
         $content = ob_get_clean();
         ob_end_clean();

@@ -25,6 +25,7 @@ class FactCollection extends \ArrayObject
      */
     public function offsetSet($index, $newval): void {
         $this->ensureFactObject($newval);
+        parent::offsetSet($index, $newval);
     }
     
     /**

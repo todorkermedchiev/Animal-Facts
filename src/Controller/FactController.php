@@ -54,9 +54,9 @@ class FactController
     public function list(int $amount, string $type): string
     {      
         $list = $this->repository->getRandomList($amount, $type);
+        $viewModel = $list->getArrayCopy();
         $view = new View('views');
-        $view->render('fact/list', $list);       
-        return $view;
+        return $view->render('fact/list', $viewModel);       
     }
     
     /**
