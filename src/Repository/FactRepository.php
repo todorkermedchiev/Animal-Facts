@@ -13,6 +13,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\RequestInterface;
 use App\Exception\InvalidResponseBodyException;
 use App\Exception\HttpResponseException;
+use App\Exception\InvalidCollectionObjectException;
+use App\Exception\InvalidFactTypeException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Client;
 use DateTimeImmutable;
@@ -68,14 +70,17 @@ class FactRepository
         $body = $response->getBody();
         $decoded = $this->decodeResponseBody($body);
         
-        $user = new User($decoded->user->_id,
-                         $decoded->user->photo,
-                         ['FirstName' => $decoded->user->name->first,
-                          'LastName' => $decoded->user->name->last]);
-        $fact = $this->createFact($decoded);
-        $fact->setAuthor($user);
-        
-        return $fact;
+        try {
+            $user = new User($decoded->user->_id,
+                             $decoded->user->photo,
+                             ['FirstName' => $decoded->user->name->first,
+                              'LastName' => $decoded->user->name->last]);
+            $fact = $this->createFact($decoded);
+            $fact->setAuthor($user);
+            return $fact;
+        } catch (Exception $ex) {
+            throw new InvalidFactTypeException($ex);
+        }
     }
     
     /**
@@ -96,15 +101,19 @@ class FactRepository
         $body = $response->getBody();
         $decoded = $this->decodeResponseBody($body);
         
-        $factCollection = new FactCollection();
-        if ($amount == 1) {
-            $fact = $this->createFact($decoded);
-            $factCollection->offsetSet($fact->getId(), $fact);
-        } else {
-            foreach ($decoded as $object) {
-                $fact = $this->createFact($object);
+        try {
+            $factCollection = new FactCollection();
+            if ($amount == 1) {
+                $fact = $this->createFact($decoded);
                 $factCollection->offsetSet($fact->getId(), $fact);
+            } else {
+                foreach ($decoded as $object) {
+                    $fact = $this->createFact($object);
+                    $factCollection->offsetSet($fact->getId(), $fact);
+                }
             }
+        } catch (Exception $ex) {
+            throw new InvalidCollectionObjectException($ex);
         }
         
         return $factCollection;
@@ -120,17 +129,23 @@ class FactRepository
     {
         $fact = new Fact();
         
-        $createdAt = DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s.v\Z', $object->createdAt);
-        $updatedAt = DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s.v\Z', $object->updatedAt);
-        
-        $status = new Status($object->status->verified, $object->status->sentCount);
-              
-        return $fact->setId($object->_id)
-                ->setText($object->text)
-                ->setType($object->type)
-                ->setCreatedAt($createdAt)
-                ->setUpdatedAt($updatedAt)
-                ->setStatus($status);
+        try {
+            $createdAt = DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s.v\Z', $object->createdAt);
+            $updatedAt = DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s.v\Z', $object->updatedAt);
+
+            $status = new Status($object->status->verified, $object->status->sentCount);
+
+            return $fact->setId($object->_id)
+                    ->setText($object->text)
+                    ->setType($object->type)
+                    ->setCreatedAt($createdAt)
+                    ->setUpdatedAt($updatedAt)
+                    ->setStatus($status);
+        } catch (Exception $ex) {
+            throw new InvalidResponseBodyException($ex);
+        } catch (Exception $ex){
+            throw new JsonException($ex);
+        }
     }
     
     /**
@@ -161,7 +176,9 @@ class FactRepository
         try {
             return json_decode($body->__toString());
         } catch (Exception $ex) {
-            throw new InvalidResponseBodyException();
+            throw new InvalidResponseBodyException($ex);
+        } catch (Exception $ex){
+            throw new JsonException($ex);
         }
     }
     

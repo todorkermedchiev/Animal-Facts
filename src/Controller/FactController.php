@@ -53,10 +53,14 @@ class FactController
      */
     public function list(int $amount, string $type): string
     {      
-        $list = $this->repository->getRandomList($amount, $type);
-        $viewModel = $list->getArrayCopy();
-        $view = new View('views');
-        return $view->render('fact/list', $viewModel);       
+        try {
+            $list = $this->repository->getRandomList($amount, $type);
+            $viewModel = $list->getArrayCopy();
+            $view = new View('views');
+            return $view->render('fact/list', $viewModel);       
+        } catch (Exception $ex) {
+            throw new InvalidCollectionObjectException($ex);
+        }
     }
     
     /**
@@ -69,8 +73,12 @@ class FactController
      */
     public function single(string $id): string
     {
-        $fact = $this->repository->getFact($id);
-        $view = new View('views');
-        return $view->render('fact\single', ['fact' => $fact]);
+        try {
+            $fact = $this->repository->getFact($id);
+            $view = new View('views');
+            return $view->render('fact\single', ['fact' => $fact]);
+        } catch (Exception $ex) {
+            throw new InvalidFactTypeException($ex);
+        }
     }
 }
