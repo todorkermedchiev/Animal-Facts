@@ -52,7 +52,7 @@ class Status
      * 
      * @return bool True if it, otherwise false
      */
-    public function isVerified(): bool
+    public function isVerified(): ?bool
     {
         return $this->verified;
     }
